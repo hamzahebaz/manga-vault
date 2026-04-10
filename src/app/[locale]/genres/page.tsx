@@ -41,10 +41,10 @@ export default async function GenresPage({ params, searchParams }: Props) {
              return (
                  <Link 
                     key={g} 
-                    href={g === 'All' ? \`/\${locale}/genres\` : \`/\${locale}/genres?genre=\${encodeURIComponent(g)}\`} 
-                    className={\`px-6 py-3 border rounded-xl font-bold transition-colors shadow-sm hover:shadow-md \${isActive 
+                    href={g === 'All' ? `/${locale}/genres` : `/${locale}/genres?genre=${encodeURIComponent(g)}`} 
+                    className={`px-6 py-3 border rounded-xl font-bold transition-colors shadow-sm hover:shadow-md ${isActive 
                         ? 'bg-indigo-600 border-indigo-600 text-white hover:bg-indigo-700 hover:border-indigo-700' 
-                        : 'bg-white dark:bg-slate-900 border-slate-200 dark:border-slate-800 text-slate-700 dark:text-slate-300 hover:border-indigo-500 hover:text-indigo-500'}\`}
+                        : 'bg-white dark:bg-slate-900 border-slate-200 dark:border-slate-800 text-slate-700 dark:text-slate-300 hover:border-indigo-500 hover:text-indigo-500'}`}
                  >
                     {g}
                  </Link>

@@ -13,21 +13,27 @@ export default async function CatalogPage({
   searchParams,
   params
 }: {
-  searchParams: Promise<{ q?: string }>;
+  searchParams: Promise<{ q?: string; page?: string }>;
   params: Promise<{ locale: string }>;
 }) {
-  const { q } = await searchParams;
+  const resolvedParams = await searchParams;
   const { locale } = await params;
   
-  const query = q || '';
-  const results = query ? searchManga(query, locale) : mockMangaDB;
+  const query = resolvedParams.q || '';
+  const currentPage = parseInt(resolvedParams.page || '1', 10);
+  const limit = 20;
+
+  const allResults = query ? searchManga(query, locale) : mockMangaDB;
+  
+  const totalPages = Math.ceil(allResults.length / limit);
+  const results = allResults.slice((currentPage - 1) * limit, currentPage * limit);
 
   return (
     <div className="w-full py-12 px-4 max-w-7xl mx-auto flex flex-col gap-8 min-h-screen">
        <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 border-b dark:border-slate-800 pb-8">
           <div>
             <h1 className="text-4xl font-extrabold tracking-tight mb-2">Manga Directory</h1>
-            <p className="text-slate-500">Discover and browse through {mockMangaDB.length} curated manga titles.</p>
+            <p className="text-slate-500">Discover and browse through {allResults.length} curated manga titles.</p>
           </div>
           
           <div className="relative w-full md:w-96">
@@ -51,11 +57,32 @@ export default async function CatalogPage({
        </div>
 
        {results.length > 0 ? (
-         <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-6">
-           {results.map(manga => (
-             <MangaCard key={manga.id} manga={manga} />
-           ))}
-         </div>
+         <>
+           <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-6">
+             {results.map(manga => (
+               <MangaCard key={manga.id} manga={manga} />
+             ))}
+           </div>
+           
+           {/* Pagination Controls */}
+           {totalPages > 1 && (
+             <div className="flex justify-center items-center gap-2 mt-12 pt-8 border-t dark:border-slate-800">
+                {Array.from({ length: totalPages }).map((_, i) => {
+                  const pageNumber = i + 1;
+                  const isCurrent = pageNumber === currentPage;
+                  return (
+                    <a 
+                      key={pageNumber} 
+                      href={'/' + locale + '/catalog?page=' + pageNumber + (query ? '&q=' + encodeURIComponent(query) : '')}
+                      className={'w-10 h-10 flex items-center justify-center rounded-lg font-semibold transition-all ' + (isCurrent ? 'bg-indigo-600 text-white' : 'bg-white dark:bg-slate-900 text-slate-600 border hover:border-indigo-500')}
+                    >
+                      {pageNumber}
+                    </a>
+                  )
+                })}
+             </div>
+           )}
+         </>
        ) : (
          <div className="py-32 text-center flex flex-col items-center">
             <Search className="w-16 h-16 text-slate-300 mb-4" />

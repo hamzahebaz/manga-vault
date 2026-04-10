@@ -4,7 +4,7 @@ const path = require('path');
 async function fetchMangaDex() {
   console.log("Fetching top manga from MangaDex API...");
   try {
-    const url = 'https://api.mangadex.org/manga?limit=30&includes[]=cover_art&includes[]=author&order[followedCount]=desc&contentRating[]=safe&contentRating[]=suggestive';
+    const url = 'https://api.mangadex.org/manga?limit=100&includes[]=cover_art&includes[]=author&order[followedCount]=desc&contentRating[]=safe&contentRating[]=suggestive';
     const res = await fetch(url);
     const data = await res.json();
     
@@ -13,16 +13,20 @@ async function fetchMangaDex() {
       return;
     }
 
-    const mangas = data.data.map(manga => { // Manga object mapping
+    const featuredBanners = [
+      'https://images.unsplash.com/photo-1541562232579-512a21360020?q=80&w=2070&auto=format&fit=crop', // Tokyo aesthetic
+      'https://images.unsplash.com/photo-1554215161-0cc7b9cf2a5f?q=80&w=2070&auto=format&fit=crop', // Night city
+      'https://images.unsplash.com/photo-1607604276583-e1ef390978ce?q=80&w=2070&auto=format&fit=crop', // Cyberpunk
+      'https://images.unsplash.com/photo-1614531341773-3bff8b7cb3fc?q=80&w=2070&auto=format&fit=crop'  // Abstract red
+    ];
+
+    const mangas = data.data.map((manga, idx) => {
       const id = manga.id;
-      // Get title (fallback to en, or first available)
       const titleObj = manga.attributes.title || {};
       const titleEn = titleObj.en || titleObj.ja || Object.values(titleObj)[0] || 'Unknown';
       const slug = titleEn.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
-      
       const descObj = manga.attributes.description || {};
       
-      // Cover Art
       const coverRel = manga.relationships.find(r => r.type === 'cover_art');
       const authorRel = manga.relationships.find(r => r.type === 'author');
       
@@ -32,7 +36,6 @@ async function fetchMangaDex() {
       }
       
       let author = authorRel && authorRel.attributes ? authorRel.attributes.name : 'Unknown';
-      
       const year = manga.attributes.year || 2020;
       const statusMap = {
           'ongoing': 'Ongoing',
@@ -40,7 +43,9 @@ async function fetchMangaDex() {
           'hiatus': 'Hiatus',
           'cancelled': 'Completed'
       };
+      
       const status = statusMap[manga.attributes.status] || 'Ongoing';
+      const assignedBanner = featuredBanners[idx % featuredBanners.length];
       
       return {
           id: id,
@@ -54,12 +59,13 @@ async function fetchMangaDex() {
               fr: descObj.fr || descObj.en || "Pas de description en français."
           },
           coverImage: coverImage,
+          featuredImage: assignedBanner,
           author: author,
           year: year,
           status: status,
           chapters: manga.attributes.lastChapter ? parseInt(manga.attributes.lastChapter) : 0,
           genres: manga.attributes.tags.filter(t => t.attributes.group === 'genre').map(t => t.attributes.name.en).slice(0, 3) || ['Manga'],
-          rating: parseFloat((Math.random() * (9.9 - 8.0) + 8.0).toFixed(1)), // Mock rating
+          rating: parseFloat((Math.random() * (9.9 - 8.0) + 8.0).toFixed(1)),
           ratingCount: Math.floor(Math.random() * 100000)
       };
     });
@@ -70,6 +76,7 @@ async function fetchMangaDex() {
   title: Record<string, string>;
   synopsis: Record<string, string>;
   coverImage: string;
+  featuredImage: string;
   author: string;
   year: number;
   status: 'Ongoing' | 'Completed' | 'Hiatus';
@@ -90,6 +97,10 @@ export function searchManga(query: string, locale: string = 'en') {
      const t = m.title[locale] || m.title.en || '';
      return t.toLowerCase().includes(query.toLowerCase()) || m.author.toLowerCase().includes(query.toLowerCase());
    });
+}
+
+export function getMangaBySlug(slug: string) {
+   return mockMangaDB.find(m => m.slug === slug);
 }
 `;
 

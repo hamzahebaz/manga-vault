@@ -54,7 +54,7 @@ export default function SurpriseMePage({ params }: { params: Promise<{locale: st
             </p>
 
             {/* Display Card */}
-            <div className={\`w-full max-w-2xl bg-white dark:bg-slate-900 rounded-3xl shadow-2xl overflow-hidden border border-slate-200 dark:border-slate-800 transition-all duration-300 \${spinning ? 'scale-95 blur-[2px]' : 'scale-100 blur-0 ring-4 ring-indigo-500/50'}\`}>
+            <div className={'w-full max-w-2xl bg-white dark:bg-slate-900 rounded-3xl shadow-2xl overflow-hidden border border-slate-200 dark:border-slate-800 transition-all duration-300 ' + (spinning ? 'scale-95 blur-[2px]' : 'scale-100 blur-0 ring-4 ring-indigo-500/50')}>
                 <div className="relative h-64 w-full bg-slate-800">
                    {currentDisplay.featuredImage && (
                        <Image src={currentDisplay.featuredImage} alt="Cover" fill className="object-cover opacity-80" unoptimized={true} />
@@ -79,7 +79,7 @@ export default function SurpriseMePage({ params }: { params: Promise<{locale: st
                 <button 
                   onClick={triggerRoulette} 
                   disabled={spinning}
-                  className={\`flex items-center gap-2 px-8 py-4 rounded-xl font-bold text-xl transition-all shadow-lg \${spinning ? 'bg-slate-300 text-slate-500 cursor-not-allowed' : 'bg-indigo-600 text-white hover:bg-indigo-700 hover:scale-105 active:scale-95'}\`}
+                  className={'flex items-center gap-2 px-8 py-4 rounded-xl font-bold text-xl transition-all shadow-lg ' + (spinning ? 'bg-slate-300 text-slate-500 cursor-not-allowed' : 'bg-indigo-600 text-white hover:bg-indigo-700 hover:scale-105 active:scale-95')}
                 >
                     <Dice5 className="w-6 h-6" />
                     {spinning ? 'Rolling...' : 'Spin the Wheel'}
@@ -87,7 +87,7 @@ export default function SurpriseMePage({ params }: { params: Promise<{locale: st
                 
                 {!spinning && (
                     <button 
-                      onClick={() => router.push(\`/manga/\${currentDisplay.slug}\`)}
+                      onClick={() => router.push('/manga/' + currentDisplay.slug)}
                       className="flex items-center justify-center gap-2 px-8 py-4 bg-slate-900 dark:bg-white text-white dark:text-slate-900 rounded-xl font-bold text-xl hover:scale-105 active:scale-95 transition-all shadow-lg"
                     >
                         Read Now <ArrowRight className="w-6 h-6" />

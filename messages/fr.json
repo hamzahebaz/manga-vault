@@ -1,0 +1,17 @@
+{
+  "Index": {
+    "title": "Découverte Anime & Manga",
+    "trending": "Tendances Actuelles",
+    "latest": "Dernières Sorties",
+    "topRated": "Les Mieux Notés"
+  },
+  "Navigation": {
+    "home": "Accueil",
+    "catalog": "Catalogue",
+    "popular": "Populaire",
+    "latest": "Récent",
+    "myList": "Ma Liste",
+    "search": "Rechercher un manga... ",
+    "language": "Langue"
+  }
+}

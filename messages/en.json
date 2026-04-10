@@ -1,0 +1,17 @@
+{
+  "Index": {
+    "title": "Anime & Manga Discovery",
+    "trending": "Currently Trending",
+    "latest": "Latest Releases",
+    "topRated": "Top Rated"
+  },
+  "Navigation": {
+    "home": "Home",
+    "catalog": "Catalog",
+    "popular": "Popular",
+    "latest": "Latest",
+    "myList": "My List",
+    "search": "Search manga...",
+    "language": "Language"
+  }
+}

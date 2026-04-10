@@ -1,0 +1,17 @@
+{
+  "Index": {
+    "title": "Descubrimiento de Anime y Manga",
+    "trending": "Tendencias Actuales",
+    "latest": "Últimos Lanzamientos",
+    "topRated": "Mejor Valorados"
+  },
+  "Navigation": {
+    "home": "Inicio",
+    "catalog": "Catálogo",
+    "popular": "Popular",
+    "latest": "Último",
+    "myList": "Mi Lista",
+    "search": "Buscar manga...",
+    "language": "Idioma"
+  }
+}
